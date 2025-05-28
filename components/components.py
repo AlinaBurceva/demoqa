@@ -9,7 +9,8 @@ class WebElement:
         self.locator_type = locator_type
 
     def find_element(self):
-        return self.driver.find_element(self.get_by_type(), self.locator)
+        return self.driver.find_element(By.CSS_SELECTOR, self.locator)
+    #self.get_by_type()
 
 
     def find_elements(self):
@@ -47,3 +48,15 @@ class WebElement:
 
     def visible(self):
         return self.find_element().is_displayed()
+
+    def check_count_elements(self, count: int) -> bool:
+
+        if len(self.find_elements()) == count:
+            return  True
+        return False
+
+    def send_keys(self, text: str):
+        self.find_element().send_keys(text)
+
+
+
