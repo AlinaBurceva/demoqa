@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver import Keys
 from selenium.common import NoSuchElementException
 
 class WebElement:
@@ -9,15 +10,24 @@ class WebElement:
         self.locator_type = locator_type
 
     def find_element(self):
-        return self.driver.find_element(By.CSS_SELECTOR, self.locator)
+        return self.driver.find_element(self.get_by_type(), self.locator)
     #self.get_by_type()
 
 
     def find_elements(self):
-        return self.driver.find_elements(By.CSS_SELECTOR, self.locator)
+        return self.driver.find_elements(self.get_by_type(), self.locator)
+
+    def scroll_to_element(self):
+        self.driver.execute_script(
+            'window.scrollTo(0, document.body.scrollHeight);',
+            self.find_element()
+        )
 
     def click(self):
         self.find_element().click()
+
+    def click_force(self):
+        self.driver.execute_script('arguments[0].click();', self.find_element())
 
     def exist(self):
         try:
@@ -58,5 +68,17 @@ class WebElement:
     def send_keys(self, text: str):
         self.find_element().send_keys(text)
 
+    def clear(self):
+        self.send_keys(Keys.CONTROL + 'a')
+        self.send_keys(Keys.DELETE)
+
+    def get_dom_attribute(self, name: str):
+        value = self.find_element().get_dom_attribute(name)
+
+        if value is None:
+            return value
+        if len(value) > 0:
+            return value
+        return True
 
 
