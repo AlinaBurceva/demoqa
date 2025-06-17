@@ -17,11 +17,20 @@ def test_check_modal(browser):
     except requests.exceptions.RequestException:
         pytest.skip("Страница недоступна, пропускаем тест")
 
-        modal_page.small_modal.click()
+        assert modal_page.small_modal_btn.exist()
+        assert modal_page.large_modal_btn.exist()
+        modal_page.small_modal_btn.click()
+        assert modal_page.small_modal.exist()
         time.sleep(2)
+        assert modal_page.close_small_modal.exist()
         modal_page.close_small_modal.click()
-
-        modal_page.large_modal.click()
         time.sleep(2)
+
+        assert not modal_page.small_modal.exist()
+        modal_page.large_modal_btn.click()
+        time.sleep(2)
+        assert modal_page.close_large_modal.exist()
+        assert modal_page.small_modal.exist()
         modal_page.close_large_modal.click()
         time.sleep(2)
+        assert not modal_page.small_modal.exist()
